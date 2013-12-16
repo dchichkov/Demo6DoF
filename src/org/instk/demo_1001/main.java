@@ -21,13 +21,19 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+// import android.provider.Settings;
 
 public class main extends Activity implements OnClickListener, SensorEventListener{
 	
 	private final float N2S=1000000000f;
+
+//	private static final int DELAY = 3000;
+//    int defTimeOut = 0;
+
 	
 	//Initial Camera Pos/Att
 	private float[] INIPos={0,0,5};
@@ -92,6 +98,12 @@ public class main extends Activity implements OnClickListener, SensorEventListen
         mGLSView = new GLSurfaceView(this);
         mGLSView.setRenderer(mCube);
         setContentView(mGLSView);
+
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        // defTimeOut = Settings.System.getInt(getContentResolver(), 
+        //        Settings.System.SCREEN_OFF_TIMEOUT, DELAY);
+        // Settings.System.putInt(getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT, DELAY);
+
         
         //Add button and text elements to the view
         LinearLayout ll = new LinearLayout(this);
@@ -175,6 +187,13 @@ public class main extends Activity implements OnClickListener, SensorEventListen
         	mSMan.registerListener(this, sGyro, rate);
         else
         	etv.setText("## You don't have a gyro ##");
+    }
+    
+    @Override
+    protected void onDestroy() 
+    {
+        super.onDestroy();
+        // Settings.System.putInt(getContentResolver(), Settings.System.SCREEN_OFF_TIMEOUT, defTimeOut);
     }
 
     @Override
